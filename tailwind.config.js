@@ -40,6 +40,10 @@ export default {
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
       },
+      backgroundImage: {
+        'dot-pattern': 'radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px)',
+        'grid-gradient': 'linear-gradient(to top, rgb(3, 7, 18) 0%, rgba(3, 7, 18, 0.95) 60%, rgba(3, 7, 18, 0.75) 100%)',
+      },
     },
   },
   plugins: [

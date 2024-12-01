@@ -143,7 +143,11 @@ function Resources() {
   };
 
   return (
-    <div className="min-h-screen pt-28 pb-16">
+    <div className="min-h-screen pt-28 pb-16 relative">
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[#000000] bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:16px_16px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/95 to-gray-950/75" />
+      </div>
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-end mb-6">
           <motion.button
@@ -206,7 +210,7 @@ function Resources() {
 
             {/* Tags Filter */}
             {tagsData?.allTags && (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 justify-center">
                 {tagsData.allTags.map((tag: string) => (
                   <motion.button
                     key={tag}
