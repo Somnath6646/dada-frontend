@@ -145,7 +145,7 @@ function Resources() {
   return (
     <div className="min-h-screen pt-28 pb-16 relative">
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[#000000] bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:16px_16px]" />
+        <div className="absolute inset-0 bg-[#000000] bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:16px_16px] opacity-50" />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/95 to-gray-950/75" />
       </div>
       <div className="max-w-7xl mx-auto px-6">
@@ -154,7 +154,7 @@ function Resources() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowAddForm(true)}
-            className="px-5 py-2.5 bg-primary-500/20 border border-primary-500/30 rounded-lg font-medium text-primary-400 hover:bg-primary-500/30 hover:border-primary-500/40 transition-all duration-200 flex items-center gap-2 hover:text-primary-300"
+            className="px-5 py-2.5 bg-gradient-to-r from-primary-500/20 to-primary-400/20 border border-primary-500/30 rounded-lg font-medium text-primary-400 hover:from-primary-500/30 hover:to-primary-400/30 hover:border-primary-500/40 transition-all duration-200 flex items-center gap-2 hover:text-primary-300 shadow-lg shadow-primary-500/5"
           >
             <svg
               className="w-5 h-5"
@@ -174,15 +174,29 @@ function Resources() {
         </div>
 
         <div className="max-w-2xl mx-auto mb-12">
-          <h2 className="text-4xl font-display font-bold text-center mb-4">
+          <motion.h2
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl font-display font-bold text-center mb-4 bg-gradient-to-r from-white to-gray-400 text-transparent bg-clip-text"
+          >
             Discover Community Resources
-          </h2>
-          <p className="text-gray-400 text-center mb-8">
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-gray-400 text-center mb-8"
+          >
             Explore and share valuable resources with the community. Find
             tutorials, articles, and tools.
-          </p>
+          </motion.p>
           <div className="space-y-4">
-            <div className="relative">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="relative group"
+            >
               <input
                 type="text"
                 placeholder="Search resources..."
@@ -191,10 +205,10 @@ function Resources() {
                   setSearchInput(e.target.value);
                   setSelectedTag(null);
                 }}
-                className="w-full px-5 py-4 rounded-xl bg-gray-900/50 border border-gray-800/50 focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 pl-12 transition-all duration-200"
+                className="w-full px-5 py-4 rounded-xl bg-gray-900/50 border border-gray-800/50 focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 pl-12 transition-all duration-200 backdrop-blur-sm group-hover:bg-gray-900/70"
               />
               <svg
-                className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-primary-400 transition-colors"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -206,48 +220,85 @@ function Resources() {
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-            </div>
+            </motion.div>
 
             {/* Tags Filter */}
-            {tagsData?.allTags && (
-              <div className="flex flex-wrap gap-2 justify-center">
-                {tagsData.allTags.map((tag: string) => (
-                  <motion.button
-                    key={tag}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                      if (selectedTag === tag) {
-                        setSelectedTag(null);
-                      } else {
-                        setSelectedTag(tag);
-                        setSearchInput("");
-                      }
-                    }}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      selectedTag === tag
-                        ? "bg-primary-500 text-white"
-                        : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/50"
-                    }`}
-                  >
-                    {selectedTag === tag && (
-                      <span className="mr-2" aria-hidden="true">
-                        ✓
-                      </span>
-                    )}
-                    #{tag}
-                  </motion.button>
-                ))}
-              </div>
+            {loading && !tagsData?.allTags ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="flex flex-wrap gap-2 justify-center"
+              >
+                {[...Array(15)].map((_, index) => {
+                  const widths = ["w-16", "w-20", "w-24", "w-28", "w-32"];
+                  const randomWidth =
+                    widths[Math.floor(Math.random() * widths.length)];
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.1 * index }}
+                      className={`${randomWidth} h-8 bg-gradient-to-r from-gray-800/50 via-gray-700/50 to-gray-800/50 rounded-lg animate-shimmer bg-[length:200%_100%]`}
+                    />
+                  );
+                })}
+              </motion.div>
+            ) : (
+              tagsData?.allTags && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex flex-wrap gap-2 justify-center"
+                >
+                  {tagsData.allTags.map((tag: string, index: number) => (
+                    <motion.button
+                      key={tag}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.1 * index }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        if (selectedTag === tag) {
+                          setSelectedTag(null);
+                        } else {
+                          setSelectedTag(tag);
+                          setSearchInput("");
+                        }
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        selectedTag === tag
+                          ? "bg-gradient-to-r from-primary-500 to-primary-400 text-white shadow-lg shadow-primary-500/20"
+                          : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 hover:shadow-lg hover:shadow-primary-500/5"
+                      }`}
+                    >
+                      {selectedTag === tag && (
+                        <span className="mr-2" aria-hidden="true">
+                          ✓
+                        </span>
+                      )}
+                      #{tag}
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )
             )}
 
             {/* Dgraph Badge */}
-            <div className="flex justify-end">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="flex justify-end"
+            >
               <a
                 href="https://dgraph.io"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800/50 rounded-lg text-xs text-gray-400 hover:text-gray-300 transition-colors group"
+                className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800/50 rounded-lg text-xs text-gray-400 hover:text-gray-300 transition-colors group hover:bg-gray-800/70"
               >
                 <span>Search powered by</span>
                 <img
@@ -256,13 +307,48 @@ function Resources() {
                   className="h-3.5 invert opacity-75 group-hover:opacity-100 transition-opacity"
                 />
               </a>
-            </div>
+            </motion.div>
           </div>
         </div>
 
         {loading ? (
-          <div className="text-center py-12">
-            <div className="animate-spin w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full mx-auto"></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="h-6 w-3/4 bg-gradient-to-r from-gray-800/50 via-gray-700/50 to-gray-800/50 rounded-md animate-shimmer bg-[length:200%_100%]"></div>
+                  <div className="h-6 w-16 bg-gradient-to-r from-gray-800/50 via-gray-700/50 to-gray-800/50 rounded-md animate-shimmer bg-[length:200%_100%]"></div>
+                </div>
+                <div className="aspect-video w-full mb-4 bg-gradient-to-r from-gray-800/50 via-gray-700/50 to-gray-800/50 rounded-lg animate-shimmer bg-[length:200%_100%]"></div>
+                <div className="h-4 w-full bg-gradient-to-r from-gray-800/50 via-gray-700/50 to-gray-800/50 rounded-md animate-shimmer bg-[length:200%_100%] mb-6"></div>
+                <div className="flex flex-wrap gap-2">
+                  {[...Array(5)].map((_, lineIndex) => (
+                    <div
+                      key={`line-${lineIndex}`}
+                      className="flex flex-wrap gap-2 w-full"
+                    >
+                      {[...Array(3)].map((_, tagIndex) => {
+                        const widths = ["w-16", "w-20", "w-24", "w-28", "w-32"];
+                        const randomWidth =
+                          widths[Math.floor(Math.random() * widths.length)];
+                        return (
+                          <div
+                            key={`${lineIndex}-${tagIndex}`}
+                            className={`h-6 ${randomWidth} bg-gradient-to-r from-gray-800/50 via-gray-700/50 to-gray-800/50 rounded-md animate-shimmer bg-[length:200%_100%]`}
+                          ></div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
           </div>
         ) : (
           <Masonry
@@ -270,20 +356,21 @@ function Resources() {
             className="flex -ml-4 w-auto"
             columnClassName="pl-4 bg-clip-padding"
           >
-            {allResults.map((item: Content) => (
+            {allResults.map((item: Content, index: number) => (
               <motion.div
                 key={item.id}
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 mb-4 hover:shadow-lg transition-all duration-200 border border-gray-800/50 hover:border-gray-700/50 group"
+                className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 mb-4 hover:shadow-lg transition-all duration-200 border border-gray-800/50 hover:border-gray-700/50 group hover:bg-gray-900/70"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <h2 className="font-display text-xl font-semibold group-hover:text-primary-400 transition-colors">
+                  <h2 className="font-display text-xl font-semibold group-hover:text-primary-400 transition-colors line-clamp-2">
                     {item.title}
                   </h2>
-                  <span className="px-2 py-1 bg-gray-800/50 rounded-md text-xs text-gray-400 font-medium">
+                  <span className="px-2 py-1 bg-gray-800/50 rounded-md text-xs text-gray-400 font-medium group-hover:bg-primary-500/20 group-hover:text-primary-400 transition-colors">
                     {item.type}
                   </span>
                 </div>
@@ -312,7 +399,7 @@ function Resources() {
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                   )}
-                  <span className="text-primary-400 hover:text-primary-300 transition-colors text-sm break-all">
+                  <span className="text-primary-400 hover:text-primary-300 transition-colors text-sm break-all line-clamp-1">
                     {item.url}
                   </span>
                 </a>
